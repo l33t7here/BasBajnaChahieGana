@@ -1,0 +1,805 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>BasBajnaChahieGana :- Leethere</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+	<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Quicksand:300,700&amp;display=swap'>
+	<script src="https://unpkg.com/video.js/dist/video.js" type="text/javascript"></script>
+	<script src="https://unpkg.com/videojs-contrib-hls/dist/videojs-contrib-hls.js" type="text/javascript"></script>
+	<style type="text/css">
+		body {
+			font-family: "Quicksand";
+			min-height: 400px;
+		}
+
+		.o-background {
+			width: 100%;
+			height: 100%;
+			min-height: 480px;
+			position: absolute;
+			background-image: -webkit-gradient(linear, left bottom, right top, from(#ff78d8), color-stop(#ead1fc), color-stop(#dadcff), color-stop(#d5e5fb), to(#dceaf3));
+			background-image: linear-gradient(to right top, #ffc4ee, #ead1fc, #dadcff, #d5e5fb, #dceaf3);
+		}
+
+		.o-background * {
+			box-sizing: border-box;
+		}
+
+		.o-credits {
+			position: absolute;
+			bottom: .5rem;
+			left: 0;
+			color: #fff;
+			width: 100%;
+			text-align: center;
+		}
+
+		.o-credits a {
+			color: #fff;
+		}
+
+		.c-player {
+			position: absolute;
+			left: 50%;
+			-webkit-transform: translateX(-50%);
+			transform: translateX(-50%);
+			width: 370px;
+			border-radius: 50%;
+			border-radius: 0 0 2rem 2rem;
+			padding: 2.5rem 1.8rem .4rem;
+			box-shadow: inset 0px -200px 180px -100px rgba(255, 255, 255, 0.3), 0px 12px 20px -20px rgba(0, 0, 0, 0.08);
+		}
+
+		.c-player * {
+			-webkit-tap-highlight-color: transparent;
+		}
+
+		.c-player__picture {
+			width: 230px;
+			height: 230px;
+			margin: 0 auto;
+			box-shadow: 0 8px 16px -6px rgba(16, 16, 16, 0.3);
+			border-radius: 50%;
+		}
+
+		.c-player__picture__images {
+			width: 230px;
+			height: 230px;
+			border-radius: 50%;
+			position: relative;
+		}
+
+		.c-player__picture__images img {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 230px;
+			height: 230px;
+			border-radius: 50%;
+			-o-object-fit: cover;
+			object-fit: cover;
+			max-width: 100%;
+			opacity: 1;
+			z-index: -99999;
+		}
+
+		.c-player__picture__images button{
+			z-index: +9999999;
+			position: absolute;
+			bottom: 15px;
+			right: 15px;
+			height: 40px;
+			width: 40px;
+			border-radius: 50%;
+			outline: none;
+			border: 0;
+			color: #fff;
+			background-color: #181818;
+			font-size: 25px;
+			opacity: .8;
+			border: 2px solid #ffffff;
+			cursor: pointer;
+		}
+
+		.c-player__picture__images img+img {
+			opacity: 0;
+		}
+
+		.c-player__details {
+			font-family: "Arial Black", Gadget, sans-serif;
+            font-size: 25px;
+            letter-spacing: 2px;
+            word-spacing: 2px;
+            color: #c0c0c0;
+            font-weight: 400;
+            text-decoration: none;
+            font-style: normal;
+            font-variant: small-caps;
+            text-transform: none;
+            text-align: center;
+			line-height: 1.3;
+			margin: 1.3rem 0 1.8rem;
+			font-size: 1.2rem;
+		}
+
+		.c-player__details strong {
+			display: block;
+			font-size: 1.4rem;
+		}
+
+		.c-player__ui {
+			display: -webkit-box;
+			display: flex;
+			-webkit-box-pack: justify;
+			justify-content: space-between;
+			flex-wrap: wrap;
+			-webkit-box-align: center;
+			align-items: center;
+			width: 230px;
+			margin: 0 auto;
+			position: relative;
+		}
+
+		.c-player__ui__seek {
+			width: 100%;
+			border-radius: 15px;
+			overflow: hidden;
+			height: .4rem;
+			margin-top: 1.7rem;
+		}
+
+		.c-player__ui__seek__seeker {
+			height: .5rem;
+			background: rgba(255, 255, 255, 0.3);
+			width: 0%;
+			margin: 0 auto;
+			border-radius: 15px;
+		}
+
+		.c-player__ui__seek__seeker div {
+			background: #fff;
+			width: 0;
+			height: .5rem;
+		}
+
+		.c-player__ui .o-controls {
+			position: relative;
+			width: 40px;
+			height: 40px;
+		}
+
+		.c-player__ui__play {
+			width: 40px;
+			margin: 0;
+			cursor: pointer;
+			position: absolute;
+			top: 0;
+			left: 0;
+		}
+
+		.c-player__ui__play svg {
+			width: 40px;
+			fill: white;
+		}
+
+		.c-player__ui__pause {
+			position: absolute;
+			visibility: hidden;
+			top: 50%;
+			left: 50%;
+			-webkit-transform: translateX(-50%) translateY(-50%);
+			transform: translateX(-50%) translateY(-50%);
+			width: 29px;
+			height: 29px;
+			cursor: pointer;
+		}
+
+		.c-player__ui__pause svg {
+			width: 12px;
+			fill: rgba(255, 255, 255, 0.7);
+			box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+		}
+
+		.c-player__ui__pause svg+svg {
+			visibility: hidden;
+		}
+
+		.c-player__ui__next,
+		.c-player__ui__prev {
+			height: 25px;
+			cursor: pointer;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+		}
+
+		.c-player__ui__next svg,
+		.c-player__ui__prev svg {
+			fill: #fff;
+			width: 25px;
+			height: 25px;
+			opacity: .6;
+		}
+
+		.c-player__ui__next svg+svg,
+		.c-player__ui__prev svg+svg {
+			margin-left: -15px;
+		}
+
+		.c-player__ui__prev {
+			-webkit-transform: rotate(180deg);
+			transform: rotate(180deg);
+		}
+
+		.c-player__ui__dots {
+			-webkit-filter: url("#goo");
+			filter: url("#goo");
+			margin: 0 auto;
+			position: absolute;
+			left: 43%;
+			top: 29px;
+		}
+
+		.c-player__ui__dots__dot {
+			height: .6rem;
+			width: .6rem;
+			background: #fff;
+			border-radius: 50%;
+			position: absolute;
+			top: 0;
+			visibility: hidden;
+		}
+
+		.c-player__ui__dots__dot+.c-player__ui__dots__dot+.c-player__ui__dots__dot {
+			height: .8rem;
+			top: -1px;
+		}
+
+		::placeholder {
+			color: #fff;
+			opacity: .9;
+		}
+
+		.c-player__search {
+			width: 100%;
+			margin: 50px 0px;
+		}
+
+		.c-player__search input {
+			background-color: transparent;
+			border: 1px solid #fff;
+			outline: none;
+			color: #181818;
+			padding: 5px;
+			height: 30px;
+			border-radius: 5px;
+		}
+
+		.c-player__search .searchBtn {
+			background-color: transparent;
+			outline: none;
+			border: 1px solid #fff;
+			padding: 5px 10px;
+			height: 30px;
+			border-radius: 5px;
+			width: 30%;
+			color: #fff;
+			cursor: pointer;
+		}
+	</style>
+
+</head>
+
+<body>
+	<!-- partial:index.partial.html -->
+	<div class="o-background">
+		<div class="c-player">
+
+			<div class="c-player__search">
+				<input type="text" id="songName" placeholder="Enter Song Name" name="songName"> <button
+					class="searchBtn" id="srchbtn"onclick="search()">Search</button>
+			</div>
+
+			<div class="c-player__picture">
+				<div class="c-player__picture__images">
+					<img id = 'imgthumb'
+						src="https://github.com/l33t7here/BasBajnaChahieGana/blob/master/47584183_490171431506297_1811646118658421491_n.jpg?raw=true">
+					<img
+						src="https://images.unsplash.com/photo-1564463836192-7ca5d09c8e92?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjE0NTg5fQ&h=300&w=300">
+					<button class="downloadBtn">⇩</button>
+				</div>
+			</div>
+
+			<div class="c-player__details">
+				<strong>LEETHERE</strong>
+				<span id="trackname">Bring iT uP (GOPU)</span>
+			</div>
+
+			<div class="c-player__ui">
+				<div class="c-player__ui__prev">
+					<svg class="icon" viewBox="0 0 232.153 232.153">
+						<use class="play" xlink:href="#play" x="0" y="0" />
+					</svg>
+					<svg class="icon" viewBox="0 0 232.153 232.153">
+						<use class="play" xlink:href="#play" x="0" y="0" />
+					</svg>
+				</div>
+
+				<div class="o-controls">
+					<div class="c-player__ui__play">
+						<svg class="icon" viewBox="0 0 232.153 232.153">
+							<use class="play" xlink:href="#play" x="0" y="0" />
+						</svg>
+					</div>
+
+					<div class="c-player__ui__pause">
+						<svg class="icon" viewBox="0 0 14 36">
+							<use class="pause" xlink:href="#pause" x="0" y="0" />
+						</svg>
+						<svg class="icon" viewBox="0 0 14 36">
+							<use class="pause" xlink:href="#pause" x="0" y="0" />
+						</svg>
+					</div>
+				</div>
+
+				<div class="c-player__ui__next">
+					<svg class="icon" viewBox="0 0 232.153 232.153">
+						<use class="play" xlink:href="#play" x="0" y="0" />
+					</svg>
+					<svg class="icon" viewBox="0 0 232.153 232.153">
+						<use class="play" xlink:href="#play" x="0" y="0" />
+					</svg>
+				</div>
+
+				<div class="c-player__ui__seek">
+					<div class="c-player__ui__seek__seeker">
+						<div></div>
+					</div>
+				</div>
+
+				<div class="c-player__ui__dots">
+					<div class="c-player__ui__dots__dot"></div>
+					<div class="c-player__ui__dots__dot"></div>
+					<div class="c-player__ui__dots__dot"></div>
+					<div class="c-player__ui__dots__dot"></div>
+				</div>
+
+			</div>
+		</div>
+
+
+		<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+			<defs>
+				<filter id="goo">
+					<feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+					<feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9"
+						result="goo" />
+					<feBlend in="SourceGraphic" in2="goo" />
+				</filter>
+			</defs>
+			<symbol id="play">
+				<path style="fill-rule:evenodd;clip-rule:evenodd;"
+					d="M203.791,99.628L49.307,2.294c-4.567-2.719-10.238-2.266-14.521-2.266   c-17.132,0-17.056,13.227-17.056,16.578v198.94c0,2.833-0.075,16.579,17.056,16.579c4.283,0,9.955,0.451,14.521-2.267   l154.483-97.333c12.68-7.545,10.489-16.449,10.489-16.449S216.471,107.172,203.791,99.628z" />
+			</symbol>
+			<symbol id="pause">
+				<rect x="0" width="13" height="36" rx="2"></rect>
+			</symbol>
+		</svg>
+		<audio id ='playertttt'>
+			<source id ="urltrack"  src= ""
+				type="application/x-mpegURL">
+		</audio>
+	</div>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js' type="text/javascript"></script>
+		<script>
+		class PlayerWidget {
+			constructor(player, tracks) {
+				// State
+				this.current = 0
+				this.next = 0
+				this.currentImage = 0
+				this.tracks = tracks
+				this.player = player
+				this.isPaused = false
+				this.interval = null
+				// DOM
+				this.progressBar = this.player.querySelector('.c-player__ui__seek__seeker div')
+				this.progress = this.player.querySelector('.c-player__ui__seek__seeker')
+				this.playBtn = this.player.querySelector('.c-player__ui__play')
+				this.pauseBtn = this.player.querySelector('.c-player__ui__pause')
+				this.pauseSvgs = this.pauseBtn.querySelectorAll('svg')
+				this.prevBtn = this.player.querySelector('.c-player__ui__prev')
+				this.nextBtn = this.player.querySelector('.c-player__ui__next')
+				this.dots = this.player.querySelectorAll('.c-player__ui__dots__dot')
+				this.bindEvents()
+			}
+
+			bindEvents() {
+				this.nextBtn.addEventListener('click', e => this.nextTrack(e))
+				this.prevBtn.addEventListener('click', e => this.prevTrack(e))
+				this.playBtn.addEventListener('click', () => this.playTrack())
+				this.pauseBtn.addEventListener('click', () => this.pauseTrack())
+			}
+
+			playTrack() {
+				this.tiltX()
+				this.tl
+					.set(this.pauseBtn, {
+						transformPerspective: 1000,
+						rotationY: 45,
+						rotationX: -45,
+						scale: .8
+					})
+					.to(this.playBtn, .2, {
+						y: 8,
+						yoyo: true,
+						ease: Sine.easeInOut,
+						repeat: 1
+					}, 0)
+
+					// Dots
+					.set(this.dots, {
+						autoAlpha: 1
+					})
+					.to(this.dots[1], .5, {
+						y: 35,
+						scale: .4,
+						onComplete: () => {
+							this.tl.set(this.dots, {
+								autoAlpha: 0
+							})
+							this.play()
+						},
+						ease: Sine.easeIn
+					}, .65)
+					.to(this.dots[2], .9, {
+						y: 35,
+						scale: .7,
+						ease: Power4.easeIn
+					}, 0)
+					.to(this.dots[3], .9, {
+						y: 15,
+						scaleX: 0,
+						scaleY: 2,
+						ease: Power4.easeIn
+					}, 0)
+				
+					videojs("playertttt").play();
+			}
+
+			pauseTrack() {
+				this.isPaused = true
+				this.tiltX()
+				this.tl
+					.set(this.playBtn, {
+						rotation: -45
+					})
+					.to(this.pauseSvgs[0], .25, {
+						y: 4,
+						yoyo: true,
+						repeat: 1,
+						ease: Sine.easeInOut
+					})
+					.to(this.playBtn, .3, {
+						rotation: 0,
+						scale: 1,
+						ease: Power4.easeIn,
+						autoAlpha: .9
+					}, .9)
+					.to(this.pauseBtn, .1, {
+						autoAlpha: 0
+					}, 1)
+					.to(this.progress, .7, {
+						width: '0%',
+						ease: Power4.easeOut
+					}, .8)
+					.to(this.pauseSvgs[1], .2, {
+						autoAlpha: 0
+					}, .9)
+					.to(this.progress, .6, {
+						alpha: 0,
+						ease: Power4.easeInOut
+					}, .8)
+					.set(this.dots, {
+						autoAlpha: 1
+					}, 1.1)
+					.to(this.dots[2], .6, {
+						y: '-=35',
+						scale: 1,
+						ease: Power4.ease
+					}, 1.1)
+					.to(this.dots[1], .6, {
+						y: '-=35',
+						scale: 1,
+						ease: Power4.ease,
+						onComplete: () => this.tl.set(this.dots, {
+							autoAlpha: 0
+						})
+					}, 1.1)
+					.set(this.dots[3], {
+						y: "-=15",
+						scaleX: 1,
+						scaleY: 1,
+						ease: Power4.ease
+					})
+					.to(this.player, .6, {
+						paddingBottom: '.4rem'
+					}, 1)
+
+					videojs("playertttt").pause();
+			}
+
+			nextTrack(e) {
+				this.incrementNextTrack()
+					.animatePrevNext(e)
+					.tiltY('right')
+					.rewind()
+					.changeImage('+')
+			}
+
+			prevTrack(e) {
+				this.decrementNextTrack()
+					.animatePrevNext(e)
+					.tiltY('left')
+					.rewind()
+					.changeImage('-')
+			}
+
+			play() {
+				this.tl
+					.set(this.pauseSvgs[1], {
+						scale: 0
+					})
+					.set(this.progress, {
+						alpha: 1
+					})
+					.to(this.progress, .8, {
+						width: '100%',
+						ease: Power4.easeOut,
+						onComplete: () => {
+							this.isPaused = false
+							this.setInterval()
+						}
+					}, 0)
+					.to(this.playBtn, .3, {
+						rotation: -30,
+						scale: .8,
+						ease: Power4.easeIn,
+						autoAlpha: 0
+					}, .25)
+					.to(this.pauseBtn, .1, {
+						scale: 1,
+						rotationY: 0,
+						rotationX: 0,
+						autoAlpha: 1,
+						onComplete: () => {
+							this.tl
+								.set(this.pauseBtn, {
+									rotationY: 0,
+									rotationX: 0,
+									scale: 1
+								})
+						}
+					}, 0.35)
+					.to(this.pauseSvgs[1], .3, {
+						scale: 1,
+						autoAlpha: 1,
+						ease: Back.easeOut
+					}, .5)
+					.to(this.player, .6, {
+						paddingBottom: '2rem'
+					}, 0.2)
+			}
+
+			rewind() {
+				this.tl.to(this.progressBar, .5, {
+					width: '-2%'
+				})
+				return this
+			}
+
+			incrementNextTrack() {
+				if (this.current >= (this.tracks.length - 1)) {
+					this.next = -1
+				}
+				this.next++
+				return this
+			}
+
+			decrementNextTrack() {
+				if (this.current <= 0) {
+					this.next = this.tracks.length
+				}
+				this.next--
+				return this
+			}
+
+			animatePrevNext(e) {
+				const icons = e.currentTarget.querySelectorAll('svg')
+
+				this.tl
+					.set(icons, {
+						scale: 1,
+						alpha: .6
+					})
+					.to(icons[1], .18, {
+						scale: .8,
+						repeat: 1,
+						alpha: 1,
+						yoyo: true
+					})
+					.to(icons[0], .18, {
+						scale: .8,
+						alpha: 1,
+						repeat: 1,
+						yoyo: true
+					}, '-=.22')
+
+				return this
+			}
+
+			tiltY(side) {
+				this.tl
+					.set(".c-player", {
+						transformPerspective: 1000,
+						transformStyle: "preserve-3d",
+						rotationY: 0
+					})
+					.to('.c-player', .25, {
+						rotationY: side === 'right' ? 8 : -8,
+						ease: Sine.easeInOut,
+						yoyo: true,
+						repeat: 1
+					}, 0)
+
+				return this
+			}
+
+			tiltX() {
+				this.tl
+					.set(this.player, {
+						transformPerspective: 1000,
+						rotationX: 0,
+						rotationY: 0
+					})
+					.to(this.player, .25, {
+						rotationX: -4,
+						ease: Sine.easeInOut,
+						yoyo: true,
+						repeat: 1
+					})
+			}
+
+			changeImage(direction) {
+				let images = this.player.querySelectorAll('img'),
+					current = this.currentImage % 2
+
+				images[1 - current].src = this.tracks[this.next].image
+
+				this.tl
+					.set('.c-player__picture__images', {
+						rotation: 0
+					})
+					.to('.c-player__picture__images', 1.8, {
+						rotation: direction + '=360',
+						ease: Back.easeOut
+					})
+					.to(images[current], 1.8, {
+						alpha: 0,
+						ease: Expo.easeOut
+					}, 0)
+					.to(images[1 - current], 1.8, {
+						alpha: 1,
+						ease: Expo.easeOut
+					}, 0)
+
+				this.updateTrackName()
+				this.updateBackground()
+
+				// Set props for next transition
+				this.current = this.next
+				this.currentImage = ++this.currentImage % 2
+			}
+
+			updateTrackName() {
+				this.tl
+					.to('.c-player__details strong', .3, {
+						delay: .2,
+						alpha: 0,
+						scale: 0,
+						ease: Back.easeIn,
+						onComplete: timeline => {
+							timeline.target[0].innerText = this.tracks[this.next].artist
+
+							this.tl.to(timeline.target[0], .25, {
+								scale: 1,
+								delay: .1,
+								alpha: 1,
+								ease: Back.easeInOut
+							})
+						},
+						onCompleteParams: ['{self}']
+					})
+					.to('.c-player__details span', .25, {
+						alpha: 0,
+						onComplete: timeline => {
+							timeline.target[0].innerText = this.tracks[this.next].name
+
+							this.tl.to(timeline.target[0], .2, {
+								alpha: 1
+							})
+						},
+						onCompleteParams: ['{self}']
+					}, .5)
+			}
+
+			updateBackground() {
+				const gradient = this.tracks[this.next].gradient
+
+				this.tl
+					.to('.o-background', 1.5, {
+						'background-image': 'linear-gradient(to right top, ' + gradient + ')',
+						ease: Sine.easeOut
+					})
+			}
+
+			setInterval() {
+				if (this.interval !== null) {
+					return
+				}
+				this.interval = setInterval(() => {
+					if (this.isPaused === false) {
+						this.tl.to(this.progressBar, 0.2, {
+							width: '+=1%'
+						})
+					}
+				}, 1000)
+			}
+
+			get tl() {
+				return new TimelineLite()
+			}
+		}
+
+		const tracks = [{
+			artist: 'Sugar',
+			name: 'Rakuta (Official Single)',
+			image: 'https://images.unsplash.com/photo-1484589065579-248aad0d8b13?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjE0NTg5fQ&h=300&w=300',
+			gradient: '#ffc4ee, #ead1fc, #dadcff, #d5e5fb, #dceaf3'
+		}]
+		const s = new PlayerWidget(document.querySelector('.c-player'))
+		document.getElementById("playertttt").style.display = "none";
+		function search(){
+		document.getElementById('srchbtn').style.display = 'none';
+		document.getElementById('songName').style.display = 'none';
+		if(document.getElementById('songName').value != ''){
+		var divsToHide = document.getElementsByClassName("c-player__search");
+    
+        for(var i = 0; i < divsToHide.length; i++)
+        {
+        divsToHide[i].style.visibility="hidden";
+        }
+		var xmlHttp = new XMLHttpRequest();
+		theurl = 'http://leet7here-com.stackstaging.com//search.php?q=' + document.getElementById('songName').value;
+		xmlHttp.open( "GET", theurl, false )
+		xmlHttp.send( null );
+		var rel = JSON.parse(xmlHttp.responseText)[0];
+		document.getElementById('imgthumb').src =rel.Pic_URL
+		document.getElementById('trackname').innerHTML = rel.Title;
+		document.getElementById('urltrack').src = rel.Main_URL;
+		playing = false;
+		var player = videojs('playertttt', {autoplay: true});
+		s.play();
+		
+		}
+		}
+
+	</script>
+</body>
+
+</html>
