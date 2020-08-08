@@ -1,6 +1,7 @@
 #BasBajnaChahieGana
 
 * Stream high quality mp3 songs directly from Gaana.
+* User Can download mp3 Directly. 
    
 𝙏𝙝𝙞𝙨 𝙥𝙧𝙤𝙟𝙚𝙘𝙩 𝙙𝙤𝙚𝙨𝙣'𝙩 𝙙𝙚𝙥𝙚𝙣𝙙 𝙤𝙣
 
@@ -16,5 +17,5 @@ http://leethere.herokuapp.com/
 
 
 
-Thanks To @AnkitGangwar For amazing work on Gana Api.
+Thanks To @luciiiferr For amazing work on Gana Api.\n
 @Arnab Thanks For Improving Frontend :) 
