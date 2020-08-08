@@ -1,5 +1,6 @@
 <?php
-
+ $name = $_POST['name'];  
+ $url =  $_POST['url'];
 function downloadChunk($dataList,$fileName){
 
 $files = file_get_contents($dataList);
@@ -27,5 +28,6 @@ while (!feof($chunk))
    echo "Download Started";
 
 }
+downloadChunk($url,$name);
 
 ?>
