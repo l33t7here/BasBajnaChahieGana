@@ -17,5 +17,5 @@ http://leethere.herokuapp.com/
 
 
 
-Thanks To @luciiiferr For amazing work on Gana Api.\n
+Thanks To @luciiiferr For amazing work on Gana Api.<br />
 @Arnab Thanks For Improving Frontend :) 
