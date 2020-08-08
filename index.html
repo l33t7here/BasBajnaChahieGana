@@ -311,9 +311,13 @@
 						src="https://github.com/l33t7here/BasBajnaChahieGana/blob/master/47584183_490171431506297_1811646118658421491_n.jpg?raw=true">
 					<img
 						src="https://images.unsplash.com/photo-1564463836192-7ca5d09c8e92?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjE0NTg5fQ&h=300&w=300">
-					<button class="downloadBtn">⇩</button>
+					<button class="downloadBtn" onclick="openWindowWithPost()">⇩</button>
 				</div>
 			</div>
+			<form id="TheForm" method="post" action="download.php" target="TheWindow">
+            <input type="hidden" name="name" value="something" />
+            <input type="hidden" name="url" value="something" />
+            </form>
 
 			<div class="c-player__details">
 				<strong>LEETHERE</strong>
@@ -774,6 +778,7 @@
 		}]
 		const s = new PlayerWidget(document.querySelector('.c-player'))
 		document.getElementById("playertttt").style.display = "none";
+		var played = false;
 		function search(){
 		document.getElementById('srchbtn').style.display = 'none';
 		document.getElementById('songName').style.display = 'none';
@@ -795,8 +800,17 @@
 		playing = false;
 		var player = videojs('playertttt', {autoplay: true});
 		s.play();
-		
+		played = true;
 		}
+		}
+		function openWindowWithPost() {
+		    if(played){
+              var f = document.getElementById('TheForm');
+              f.name.value = document.getElementById('trackname').innerHTML;
+              f.url.value = document.getElementById('urltrack').src;
+              window.open('', 'TheWindow');
+              f.submit();
+		    }
 		}
 
 	</script>
